@@ -5,7 +5,9 @@
 import 'package:flutter/material.dart';
 import 'package:stutor/firebase_config.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:stutor/home/response_request.dart';
 import 'package:stutor/intro/splash_screen.dart';
+
 import 'package:stutor/view_container.dart';
 
 Future<void> main() async {
@@ -24,7 +26,13 @@ class Stutor extends StatelessWidget {
     return MaterialApp(
       home: const SplashScreen(),
       routes: <String, WidgetBuilder>{
-        '//': (BuildContext context) => const ViewContainer(),
+        '//': (BuildContext context) => ViewContainer(
+              state: 2,
+            ),
+        '/tutorsResponse': (BuildContext context) => const TutorsResponse(),
+        '/messages': (BuildContext context) => ViewContainer(
+              state: 1,
+            ),
       },
     );
   }

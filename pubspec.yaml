@@ -62,8 +62,11 @@ flutter:
   assets:
       - assets/graphics/white_logo.png
       - assets/graphics/pad_lines.png
+      - assets/graphics/color_logo.png
+      - assets/icons/message-notif.png
       - assets/icons/Union_1.png
       - assets/icons/calendar.png
+      - assets/icons/location.png
       - assets/icons/user.png
       - assets/icons/Union.png
       - assets/icons/message.png

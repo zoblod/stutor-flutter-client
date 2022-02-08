@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stutor/input_validator.dart';
 import 'package:stutor/data/observers/login_observer.dart';
+import 'package:stutor/intro/info.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -111,7 +112,13 @@ class _Login extends State<Login> {
                     onPressed: () async {
                       if (observer.key.currentState!.validate()) {
                         await observer.loginToFirebase();
-                        Navigator.of(context).pushNamed('//');
+                        // go to home page
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Info(
+                                      observer: observer,
+                                    )));
                       }
                       //Navigator.push(context,
                       //  MaterialPageRoute(builder: (context) => const Login()));

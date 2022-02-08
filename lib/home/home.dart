@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stutor/data/observers/home_observer.dart';
 
@@ -26,6 +25,8 @@ class _Home extends State<Home> {
 
   var helpType = ["Homework", "Exam", "Study"];
   var helpIndex = 0;
+
+  int selectedMajorIndex = 0;
 
   final Shader linearGradient = const LinearGradient(
     colors: <Color>[Color(0xFFDB4B6D), Color(0xFFE44584)],

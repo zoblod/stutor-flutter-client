@@ -9,8 +9,12 @@ class LoginObserver {
 
   final FirebaseAuth auth = FirebaseAuth.instance;
   final GlobalKey<FormState> key = GlobalKey<FormState>();
+  final GlobalKey<FormState> infoKey = GlobalKey<FormState>();
+
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
+  final firstNameController = TextEditingController();
+  final lastNameController = TextEditingController();
 
   final noAccountHashCode = 505284406;
   final networkError = 271948972;
