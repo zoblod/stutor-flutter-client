@@ -12,6 +12,9 @@ class Info3 extends StatefulWidget {
 
 class _Info3 extends State<Info3> {
   var selectedClassIndex = 0;
+
+  List<int> selectedClasses = [];
+
   var observer = HomeObserver();
   final Shader linearGradient = const LinearGradient(
     colors: <Color>[Color(0xFFDB4B6D), Color(0xFFE44584)],
@@ -20,12 +23,18 @@ class _Info3 extends State<Info3> {
   ).createShader(const Rect.fromLTWH(0.0, 0.0, 300.0, 80.0));
 
   @override
+  void initState() {
+    super.initState();
+    // fetch classes from university
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
           alignment: Alignment.center,
           decoration: const BoxDecoration(
-            color: Color.fromRGBO(64, 44, 60, 1),
+            color: Color(0xFF382E35),
             image: DecorationImage(
                 image: ExactAssetImage('assets/graphics/pad_lines.png'),
                 fit: BoxFit.fitHeight),
@@ -42,7 +51,7 @@ class _Info3 extends State<Info3> {
                     child: Column(
                       children: [
                         Text(
-                          "Let's find you",
+                          "Tell us about",
                           textScaleFactor: 3.5,
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -51,7 +60,7 @@ class _Info3 extends State<Info3> {
                               foreground: Paint()..shader = linearGradient),
                         ),
                         Text(
-                          "a stutor!",
+                          "yourself",
                           textScaleFactor: 3.5,
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -76,7 +85,7 @@ class _Info3 extends State<Info3> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const [
                             Text(
-                              "Select a",
+                              "Select your current",
                               textScaleFactor: 1.5,
                               style: TextStyle(
                                   fontFamily: 'Poppins',
@@ -84,7 +93,7 @@ class _Info3 extends State<Info3> {
                                   color: Color(0xFFCB556F)),
                             ),
                             Text(
-                              "class",
+                              "classes",
                               textScaleFactor: 2.3,
                               style: TextStyle(
                                   fontFamily: 'Poppins',
@@ -140,16 +149,23 @@ class _Info3 extends State<Info3> {
                           subtitle: Text(observer.csClasses[index].abbr +
                               " " +
                               (observer.csClasses[index].number).toString()),
-                          selectedColor: selectedClassIndex == index
+                          selectedColor: selectedClasses.contains(index)
                               ? const Color(0xFFCB556F)
                               : null,
-                          selected: selectedClassIndex == index ? true : false,
+                          selected:
+                              selectedClasses.contains(index) ? true : false,
                           onTap: () {
-                            setState(() {
-                              selectedClassIndex = index;
-                              observer.selectedClass =
-                                  observer.csClasses[selectedClassIndex];
-                            });
+                            if (selectedClasses.contains(index)) {
+                              setState(() {
+                                selectedClasses.remove(index);
+                              });
+                            } else {
+                              setState(() {
+                                selectedClasses.add(index);
+                                observer.selectedClass =
+                                    observer.csClasses[selectedClassIndex];
+                              });
+                            }
                           },
                         );
                       },

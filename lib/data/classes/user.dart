@@ -8,9 +8,12 @@ class User {
   var status = "Student";
   var university = "Brigham Young University";
   var classes = [
-    Class("CS", "Intro to Computer Programming", 142),
-    Class("HIST", "American Heritage", 101),
-    Class("PHY", "Intro to Physics", 101),
-    Class("CS", "Deep Learning", 474),
+    Class("CS", "Intro to Computer Programming", 142, []),
+    Class("HIST", "American Heritage", 101, []),
+    Class("PHY", "Intro to Physics", 101, []),
+    Class("CS", "Deep Learning", 474, [])
   ];
+
+  User(this.firstName, this.lastName, this.gender, this.major, this.status,
+      this.university, this.classes);
 }

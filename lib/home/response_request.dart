@@ -39,7 +39,7 @@ class _TutorsResponse extends State<TutorsResponse> {
       body: Container(
         alignment: Alignment.center,
         decoration: const BoxDecoration(
-          color: Color.fromRGBO(64, 44, 60, 1),
+          color: Color(0xFF382E35),
           image: DecorationImage(
               image: ExactAssetImage('assets/graphics/pad_lines.png'),
               fit: BoxFit.fitHeight),
@@ -52,21 +52,10 @@ class _TutorsResponse extends State<TutorsResponse> {
                 bottom: false,
                 child: FittedBox(
                   child: TextButton(
-                    onPressed: () {},
-                    child: Image.asset('assets/icons/Union_1.png'),
-                  ),
-                ),
-              ),
-              const Spacer(),
-              SafeArea(
-                top: true,
-                bottom: false,
-                child: FittedBox(
-                  child: TextButton(
                     onPressed: () {
                       Navigator.of(context).popAndPushNamed('//');
                     },
-                    child: const Text('Cancel'),
+                    child: Image.asset('assets/icons/Union_1.png'),
                   ),
                 ),
               ),
@@ -106,9 +95,9 @@ class _TutorsResponse extends State<TutorsResponse> {
           ),
           SizedBox(
             width: (MediaQuery.of(context).size.width - 25),
-            height: (MediaQuery.of(context).size.height / 1.5),
+            height: (MediaQuery.of(context).size.height / 1.4),
             child: SafeArea(
-              bottom: true,
+              bottom: false,
               child: SizedBox(
                 width: (MediaQuery.of(context).size.width - 25),
                 height: (MediaQuery.of(context).size.height / 1.5),
@@ -308,7 +297,8 @@ class _TutorsResponse extends State<TutorsResponse> {
                                           child: TextButton(
                                               onPressed: () {
                                                 Navigator.of(context)
-                                                    .popAndPushNamed('//');
+                                                    .popAndPushNamed(
+                                                        '/appointments');
                                               },
                                               child: Container(
                                                 decoration: const BoxDecoration(

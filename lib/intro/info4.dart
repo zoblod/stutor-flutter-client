@@ -14,7 +14,12 @@ class _Info4 extends State<Info4> {
   var selectedTypeIndex = 0;
   var observer = HomeObserver();
 
-  var types = ['Homework', 'Test Prep', 'Other: '];
+  var types = [
+    'Visual',
+    'Auditory',
+    'Kinesthetic(hands-on)',
+    'Reading/Writing'
+  ];
 
   final Shader linearGradient = const LinearGradient(
     colors: <Color>[Color(0xFFDB4B6D), Color(0xFFE44584)],
@@ -22,6 +27,7 @@ class _Info4 extends State<Info4> {
     end: Alignment.bottomRight,
   ).createShader(const Rect.fromLTWH(0.0, 0.0, 300.0, 80.0));
 
+  // ignore: unused_element
   void _showOverlay(BuildContext context) {
     Navigator.of(context).push(RequestSplashScreen());
     Future.delayed(const Duration(seconds: 4))
@@ -34,7 +40,7 @@ class _Info4 extends State<Info4> {
       body: Container(
           alignment: Alignment.center,
           decoration: const BoxDecoration(
-            color: Color.fromRGBO(64, 44, 60, 1),
+            color: Color(0xFF382E35),
             image: DecorationImage(
                 image: ExactAssetImage('assets/graphics/pad_lines.png'),
                 fit: BoxFit.fitHeight),
@@ -51,7 +57,7 @@ class _Info4 extends State<Info4> {
                     child: Column(
                       children: [
                         Text(
-                          "Let's find you",
+                          "Tell us about",
                           textScaleFactor: 3.5,
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -60,7 +66,7 @@ class _Info4 extends State<Info4> {
                               foreground: Paint()..shader = linearGradient),
                         ),
                         Text(
-                          "a stutor!",
+                          "yourself",
                           textScaleFactor: 3.5,
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -85,7 +91,7 @@ class _Info4 extends State<Info4> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const [
                             Text(
-                              "Select a",
+                              "Select your preferred",
                               textScaleFactor: 1.5,
                               style: TextStyle(
                                   fontFamily: 'Poppins',
@@ -93,7 +99,7 @@ class _Info4 extends State<Info4> {
                                   color: Color(0xFFCB556F)),
                             ),
                             Text(
-                              "type",
+                              "type of learning",
                               textScaleFactor: 2.3,
                               style: TextStyle(
                                   fontFamily: 'Poppins',
@@ -108,7 +114,7 @@ class _Info4 extends State<Info4> {
                               const BoxDecoration(shape: BoxShape.circle),
                           child: TextButton(
                             onPressed: () {
-                              _showOverlay(context);
+                              Navigator.of(context).popAndPushNamed("//");
                             },
                             child: Transform(
                                 alignment: Alignment.center,

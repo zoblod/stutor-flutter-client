@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum AuthStatus { emailLinkSent, isLoading }
 
@@ -18,6 +19,9 @@ class LoginObserver {
 
   final noAccountHashCode = 505284406;
   final networkError = 271948972;
+
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  late Future<String> authToken;
 
   // login / signin into firebase with email and password
   // if user has no account create one and initiate the app
@@ -45,6 +49,12 @@ class LoginObserver {
       }
     } finally {
       // Store user key
+      final SharedPreferences prefs = await _prefs;
+      authToken = prefs
+          .setString("authToken", auth.currentUser!.uid)
+          .then((bool success) {
+        return auth.currentUser!.uid;
+      });
       if (kDebugMode) {
         print(auth.currentUser!.uid);
       }

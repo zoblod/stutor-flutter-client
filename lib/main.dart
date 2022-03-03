@@ -33,6 +33,9 @@ class Stutor extends StatelessWidget {
         '/messages': (BuildContext context) => ViewContainer(
               state: 1,
             ),
+        '/appointments': (BuildContext context) => ViewContainer(
+              state: 0,
+            ),
       },
     );
   }

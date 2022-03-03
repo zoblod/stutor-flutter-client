@@ -18,7 +18,7 @@ class _Login extends State<Login> {
       body: Container(
           alignment: Alignment.center,
           decoration: const BoxDecoration(
-            color: Color.fromRGBO(64, 44, 60, 1),
+            color: Color(0xFF282828), //Color.fromRGBO(64, 44, 60, 1),
             image: DecorationImage(
                 image: ExactAssetImage('assets/graphics/pad_lines.png'),
                 fit: BoxFit.fitHeight),
@@ -29,12 +29,15 @@ class _Login extends State<Login> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Spacer(flex: 5),
-                Image.asset('assets/graphics/white_logo.png', scale: 1),
+                Image.asset(
+                  'assets/graphics/original_logo.png',
+                  scale: 5,
+                ),
                 const Spacer(
                   flex: 5,
                 ),
                 SizedBox(
-                  width: 300,
+                  width: (MediaQuery.of(context).size.width - 50),
                   child: TextFormField(
                     style: const TextStyle(color: Colors.white),
                     controller: observer.emailTextController,
@@ -62,8 +65,11 @@ class _Login extends State<Login> {
                       EdgeInsets.symmetric(vertical: 15.0, horizontal: 0.0),
                 ),
                 SizedBox(
-                  width: 300,
+                  width: (MediaQuery.of(context).size.width - 50),
                   child: TextFormField(
+                    obscureText: true,
+                    autocorrect: false,
+                    enableSuggestions: false,
                     style: const TextStyle(color: Colors.white),
                     controller: observer.passwordTextController,
                     autovalidateMode: AutovalidateMode.onUserInteraction,

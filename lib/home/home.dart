@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:stutor/custom_views/picker_view.dart';
 import 'package:stutor/data/observers/home_observer.dart';
+import 'package:stutor/home/request_splash.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -20,10 +23,10 @@ class _Home extends State<Home> {
   ];
   var classesIndex = 0;
 
-  var major = ["Any", "Computer Science", "Economics"];
+  var major = ["Any", "Computer Science"];
   var majorIndex = 0;
 
-  var helpType = ["Homework", "Exam", "Study"];
+  final helpType = ["Homework", "Exam", "Study"];
   var helpIndex = 0;
 
   int selectedMajorIndex = 0;
@@ -33,6 +36,96 @@ class _Home extends State<Home> {
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   ).createShader(const Rect.fromLTWH(0.0, 0.0, 300.0, 80.0));
+
+  // ignore: unused_field
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
+  void _displayMajorPicker() async {
+    final selectedMajor = await Navigator.push(
+        context,
+        PageRouteBuilder(
+            opaque: false,
+            transitionsBuilder:
+                (__, Animation<double> animation, ____, Widget child) {
+              return FadeTransition(
+                opacity: animation,
+                child: ScaleTransition(
+                  scale: animation,
+                  child: child,
+                ),
+              );
+            },
+            pageBuilder: (BuildContext context, _, __) {
+              return PickerView(
+                list: major,
+                type: 'selectedMajor',
+                index: 0,
+              );
+            }));
+    setState(() {
+      majorIndex = selectedMajor;
+    });
+  }
+
+  void _displayClassPicker() async {
+    final selectedClass = await Navigator.push(
+        context,
+        PageRouteBuilder(
+            opaque: false,
+            transitionsBuilder:
+                (__, Animation<double> animation, ____, Widget child) {
+              return FadeTransition(
+                opacity: animation,
+                child: ScaleTransition(
+                  scale: animation,
+                  child: child,
+                ),
+              );
+            },
+            pageBuilder: (BuildContext context, _, __) {
+              return PickerView(
+                list: classes,
+                type: 'selectedClass',
+                index: 0,
+              );
+            }));
+    setState(() {
+      classesIndex = selectedClass;
+    });
+  }
+
+  void _displayTypePicker() async {
+    final selectedType = await Navigator.push(
+        context,
+        PageRouteBuilder(
+            opaque: false,
+            transitionsBuilder:
+                (__, Animation<double> animation, ____, Widget child) {
+              return FadeTransition(
+                opacity: animation,
+                child: ScaleTransition(
+                  scale: animation,
+                  child: child,
+                ),
+              );
+            },
+            pageBuilder: (BuildContext context, _, __) {
+              return PickerView(
+                list: helpType,
+                type: 'selectedClass',
+                index: 0,
+              );
+            }));
+    setState(() {
+      helpIndex = selectedType;
+    });
+  }
+
+  void _showOverlay(BuildContext context) {
+    Navigator.of(context).push(RequestSplashScreen());
+    Future.delayed(const Duration(seconds: 4))
+        .then((value) => Navigator.popAndPushNamed(context, '/tutorsResponse'));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,13 +195,21 @@ class _Home extends State<Home> {
                                       fontWeight: FontWeight.normal,
                                       fontSize: 25.0),
                                 ),
-                                Text(
-                                  major[majorIndex],
-                                  style: const TextStyle(
-                                      color: Color(0xCC202020),
-                                      fontFamily: 'Poppins',
-                                      fontWeight: FontWeight.w100,
-                                      fontSize: 18.0),
+                                SizedBox(
+                                  height: 40,
+                                  child: TextButton(
+                                    onPressed: () {
+                                      _displayMajorPicker();
+                                    },
+                                    child: Text(
+                                      major[majorIndex],
+                                      style: const TextStyle(
+                                          color: Color(0xCC202020),
+                                          fontFamily: 'Poppins',
+                                          fontWeight: FontWeight.w100,
+                                          fontSize: 18.0),
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
@@ -129,15 +230,20 @@ class _Home extends State<Home> {
                                       fontWeight: FontWeight.normal,
                                       fontSize: 25.0),
                                 ),
-                                Text(
-                                  classes[majorIndex],
-                                  maxLines: 1,
-                                  style: const TextStyle(
-                                      overflow: TextOverflow.ellipsis,
-                                      color: Color(0xCC202020),
-                                      fontFamily: 'Poppins',
-                                      fontWeight: FontWeight.w100,
-                                      fontSize: 18.0),
+                                TextButton(
+                                  onPressed: () {
+                                    _displayClassPicker();
+                                  },
+                                  child: Text(
+                                    classes[classesIndex],
+                                    maxLines: 1,
+                                    style: const TextStyle(
+                                        overflow: TextOverflow.ellipsis,
+                                        color: Color(0xCC202020),
+                                        fontFamily: 'Poppins',
+                                        fontWeight: FontWeight.w100,
+                                        fontSize: 18.0),
+                                  ),
                                 ),
                               ],
                             ),
@@ -174,13 +280,18 @@ class _Home extends State<Home> {
                                         fontWeight: FontWeight.normal,
                                         fontSize: 25.0),
                                   ),
-                                  Text(
-                                    helpType[helpIndex],
-                                    style: const TextStyle(
-                                        color: Color(0xCC202020),
-                                        fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w100,
-                                        fontSize: 18.0),
+                                  TextButton(
+                                    onPressed: () {
+                                      _displayTypePicker();
+                                    },
+                                    child: Text(
+                                      helpType[helpIndex],
+                                      style: const TextStyle(
+                                          color: Color(0xCC202020),
+                                          fontFamily: 'Poppins',
+                                          fontWeight: FontWeight.w100,
+                                          fontSize: 18.0),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -221,7 +332,7 @@ class _Home extends State<Home> {
                                   SizedBox(
                                     width: (MediaQuery.of(context).size.width /
                                         1.2),
-                                    height: 100,
+                                    height: 80,
                                     child: TextField(
                                       controller: observer.commentsController,
                                       maxLines: 3,
@@ -244,7 +355,7 @@ class _Home extends State<Home> {
                             child: Container(
                                 alignment: Alignment.center,
                                 child: const Padding(
-                                  padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
+                                  padding: EdgeInsets.fromLTRB(0, 10, 0, 11),
                                   child: Text(
                                     'find my stutor',
                                     textAlign: TextAlign.center,
@@ -257,7 +368,7 @@ class _Home extends State<Home> {
                             style: ButtonStyle(
                               maximumSize: MaterialStateProperty.all<Size>(Size(
                                   (MediaQuery.of(context).size.width - 30),
-                                  80)),
+                                  70)),
                               backgroundColor: MaterialStateProperty.all(
                                   const Color(0xFFCB556F)),
                               splashFactory: NoSplash.splashFactory,
@@ -270,8 +381,7 @@ class _Home extends State<Home> {
                               )),
                             ),
                             onPressed: () async {
-                              //Navigator.push(context,
-                              //  MaterialPageRoute(builder: (context) => const Login()));
+                              _showOverlay(context);
                             },
                           ),
                         ),

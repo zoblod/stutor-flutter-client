@@ -87,7 +87,7 @@ class _ViewContainer extends State<ViewContainer> {
                 icon: Image.asset('assets/icons/Union.png',
                     width: 50,
                     height: 50,
-                    color: widget.state == 2
+                    color: widget.state == 2 || widget.state > 4
                         ? const Color(0xFFDB4B6D)
                         : const Color(0xFFFFFFFF)),
                 label: 'Home',

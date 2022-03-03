@@ -38,12 +38,18 @@ class _Info2 extends State<Info2> {
   ).createShader(const Rect.fromLTWH(0.0, 0.0, 300.0, 80.0));
 
   @override
+  void initState() {
+    super.initState();
+    // fetch majors
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         alignment: Alignment.center,
         decoration: const BoxDecoration(
-          color: Color.fromRGBO(64, 44, 60, 1),
+          color: Color(0xFF382E35),
           image: DecorationImage(
               image: ExactAssetImage('assets/graphics/pad_lines.png'),
               fit: BoxFit.fitHeight),
@@ -59,7 +65,7 @@ class _Info2 extends State<Info2> {
                   child: Column(
                     children: [
                       Text(
-                        "Let's find you",
+                        "Tell us about",
                         textScaleFactor: 3.5,
                         textAlign: TextAlign.center,
                         style: TextStyle(
@@ -68,7 +74,7 @@ class _Info2 extends State<Info2> {
                             foreground: Paint()..shader = linearGradient),
                       ),
                       Text(
-                        "a stutor!",
+                        "yourself",
                         textScaleFactor: 3.5,
                         textAlign: TextAlign.center,
                         style: TextStyle(
@@ -93,7 +99,7 @@ class _Info2 extends State<Info2> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: const [
                           Text(
-                            "Select a",
+                            "Select your",
                             textScaleFactor: 1.5,
                             style: TextStyle(
                                 fontFamily: 'Poppins',

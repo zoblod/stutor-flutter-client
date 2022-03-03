@@ -1,6 +1,8 @@
-import 'package:stutor/data/user.dart';
+import 'data/classes/user.dart';
 
 class SessionStore {
   var authKey = "";
-  var user = User();
+  var user = User("", "", "", [], "", "", []);
+
+  SessionStore(this.authKey, this.user);
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:stutor/custom_views/picker_view.dart';
 import 'package:stutor/data/observers/login_observer.dart';
 
 import 'info2.dart';
@@ -13,11 +15,51 @@ class Info extends StatefulWidget {
 }
 
 class _Info extends State<Info> {
+  var universityIndex = 0;
+  final universities = ["Brigham Young University", "Utah Valley University"];
+  // ignore: unused_field
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
   final Shader linearGradient = const LinearGradient(
     colors: <Color>[Color(0xFFDB4B6D), Color(0xFFE44584)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   ).createShader(const Rect.fromLTWH(0.0, 0.0, 300.0, 80.0));
+
+  void _universityPicker() async {
+    final selectedClass = await Navigator.push(
+        context,
+        PageRouteBuilder(
+            opaque: false,
+            transitionsBuilder:
+                (__, Animation<double> animation, ____, Widget child) {
+              return FadeTransition(
+                opacity: animation,
+                child: ScaleTransition(
+                  scale: animation,
+                  child: child,
+                ),
+              );
+            },
+            pageBuilder: (BuildContext context, _, __) {
+              return PickerView(
+                list: universities,
+                type: 'selectedClass',
+                index: 0,
+              );
+            }));
+    setState(() {
+      universityIndex = selectedClass;
+    });
+  }
+
+  void _storeUserInfo() async {}
+
+  @override
+  void initState() {
+    super.initState();
+    // fetch universities
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +67,7 @@ class _Info extends State<Info> {
       body: Container(
           alignment: Alignment.center,
           decoration: const BoxDecoration(
-            color: Color.fromRGBO(64, 44, 60, 1),
+            color: Color(0xFF382E35),
             image: DecorationImage(
                 image: ExactAssetImage('assets/graphics/pad_lines.png'),
                 fit: BoxFit.fitHeight),
@@ -134,6 +176,37 @@ class _Info extends State<Info> {
                                         : "Please type at least one character.",
                                   ),
                                   height: 60,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 45, 0, 0),
+                                child: SizedBox(
+                                  height: 80,
+                                  width:
+                                      (MediaQuery.of(context).size.width - 50),
+                                  child: Column(
+                                    children: [
+                                      const Text(
+                                        'Choose your School:',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontFamily: 'Poppins'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          _universityPicker();
+                                        },
+                                        child: Text(
+                                          universities[universityIndex],
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: 'Poppins',
+                                              fontSize: 20),
+                                          textAlign: TextAlign.start,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               )
                             ],

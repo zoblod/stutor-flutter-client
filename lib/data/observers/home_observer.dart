@@ -22,15 +22,15 @@ class HomeObserver {
   var userMajor = "";
 
   var csClasses = [
-    Class('CS', 'Introduction to Computer Programming', 142),
-    Class('CS', 'Introduction to Data Science', 180),
-    Class('CS', 'Introduction to Computer Systems', 224),
-    Class('CS', 'Data Structures and Algorithms', 235),
-    Class('CS', 'Discrete Structures', 236),
-    Class('CS', 'Advanced Programming Concepts', 240),
-    Class('CS', 'Web Programming', 260),
-    Class('CS', 'Algorithm Design and Analysis', 312),
-    Class('CS', 'Algorithm Design and Analysis', 324)
+    Class('CS', 'Introduction to Computer Programming', 142, []),
+    Class('CS', 'Introduction to Data Science', 180, []),
+    Class('CS', 'Introduction to Computer Systems', 224, []),
+    Class('CS', 'Data Structures and Algorithms', 235, []),
+    Class('CS', 'Discrete Structures', 236, []),
+    Class('CS', 'Advanced Programming Concepts', 240, []),
+    Class('CS', 'Web Programming', 260, []),
+    Class('CS', 'Algorithm Design and Analysis', 312, []),
+    Class('CS', 'Algorithm Design and Analysis', 324, [])
   ];
 
   late Class selectedClass;

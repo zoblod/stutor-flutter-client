@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stutor/home/loading_splash.dart';
 
 class RequestSplashScreen extends ModalRoute<void> {
   @override
@@ -53,12 +54,6 @@ class RequestSplashScreen extends ModalRoute<void> {
   Widget buildTransitions(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation, Widget child) {
     // You can add your own animations for the overlay content
-    return FadeTransition(
-      opacity: animation,
-      child: ScaleTransition(
-        scale: animation,
-        child: child,
-      ),
-    );
+    return const LoadingSplash();
   }
 }

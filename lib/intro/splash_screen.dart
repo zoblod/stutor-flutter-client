@@ -57,11 +57,14 @@ class _SplashScreen extends State<SplashScreen> {
     return Container(
         alignment: Alignment.center,
         decoration: const BoxDecoration(
-          color: Color.fromRGBO(64, 44, 60, 1),
+          color: Color(0xFF282828),
           image: DecorationImage(
               image: ExactAssetImage('assets/graphics/pad_lines.png'),
               fit: BoxFit.fitHeight),
         ),
-        child: Image.asset('assets/graphics/white_logo.png'));
+        child: Image.asset(
+          'assets/graphics/original_logo.png',
+          scale: 5,
+        ));
   }
 }

@@ -35,6 +35,8 @@ dependencies:
   cloud_firestore: ^3.1.6
   cupertino_icons: ^1.0.2
   shared_preferences: "2.0.12"
+  image_sequence_animator: ^2.0.0
+  direct_select: ^2.0.0
   
 dev_dependencies:
   flutter_test:
@@ -62,6 +64,7 @@ flutter:
   assets:
       - assets/graphics/white_logo.png
       - assets/graphics/pad_lines.png
+      - assets/graphics/original_logo.png
       - assets/graphics/color_logo.png
       - assets/icons/message-notif.png
       - assets/icons/Union_1.png
