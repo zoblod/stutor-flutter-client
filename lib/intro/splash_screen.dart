@@ -1,16 +1,15 @@
 import 'dart:async';
-import 'package:stutor/home/home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:stutor/intro/login.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:stutor/view_container.dart';
 
 // Splash screen pops up at the start of app
 
+// ignore: must_be_immutable
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({
-    Key? key,
-  }) : super(key: key);
-
+  const SplashScreen({Key? key}) : super(key: key);
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.center);
   }
@@ -42,13 +41,11 @@ class _SplashScreen extends State<SplashScreen> {
   // if true go straight to home
   // else go to intro page
   void checkUser() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String userId = prefs.getString("userId") ?? "Error";
-
-    if (userId == "Error") {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    if (auth.currentUser == null) {
       next = const Login();
     } else {
-      next = const Home();
+      next = ViewContainer(state: 2);
     }
   }
 

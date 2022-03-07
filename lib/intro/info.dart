@@ -5,6 +5,8 @@ import 'package:stutor/data/observers/login_observer.dart';
 
 import 'info2.dart';
 
+/* View to get Name and School
+ */
 class Info extends StatefulWidget {
   const Info({Key? key, required this.observer}) : super(key: key);
 
@@ -16,7 +18,8 @@ class Info extends StatefulWidget {
 
 class _Info extends State<Info> {
   var universityIndex = 0;
-  final universities = ["Brigham Young University", "Utah Valley University"];
+  var selectedGender = 0;
+  var genders = ["Male", "Female", "Other"];
   // ignore: unused_field
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
@@ -27,7 +30,7 @@ class _Info extends State<Info> {
   ).createShader(const Rect.fromLTWH(0.0, 0.0, 300.0, 80.0));
 
   void _universityPicker() async {
-    final selectedClass = await Navigator.push(
+    final index = await Navigator.push(
         context,
         PageRouteBuilder(
             opaque: false,
@@ -43,17 +46,42 @@ class _Info extends State<Info> {
             },
             pageBuilder: (BuildContext context, _, __) {
               return PickerView(
-                list: universities,
-                type: 'selectedClass',
-                index: 0,
+                list: widget.observer.universities,
+                type: 'selectedUniversity',
+                index: universityIndex,
               );
             }));
     setState(() {
-      universityIndex = selectedClass;
+      universityIndex = index;
     });
   }
 
-  void _storeUserInfo() async {}
+  void _genderPicker() async {
+    final index = await Navigator.push(
+        context,
+        PageRouteBuilder(
+            opaque: false,
+            transitionsBuilder:
+                (__, Animation<double> animation, ____, Widget child) {
+              return FadeTransition(
+                opacity: animation,
+                child: ScaleTransition(
+                  scale: animation,
+                  child: child,
+                ),
+              );
+            },
+            pageBuilder: (BuildContext context, _, __) {
+              return PickerView(
+                list: genders,
+                type: 'selectedGender',
+                index: selectedGender,
+              );
+            }));
+    setState(() {
+      selectedGender = index;
+    });
+  }
 
   @override
   void initState() {
@@ -187,7 +215,38 @@ class _Info extends State<Info> {
                                   child: Column(
                                     children: [
                                       const Text(
-                                        'Choose your School:',
+                                        'Select Your Gender:',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontFamily: 'Poppins'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          _genderPicker();
+                                        },
+                                        child: Text(
+                                          genders[selectedGender],
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: 'Poppins',
+                                              fontSize: 20),
+                                          textAlign: TextAlign.start,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 45, 0, 0),
+                                child: SizedBox(
+                                  height: 80,
+                                  width:
+                                      (MediaQuery.of(context).size.width - 50),
+                                  child: Column(
+                                    children: [
+                                      const Text(
+                                        'Select Your School:',
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontFamily: 'Poppins'),
@@ -197,7 +256,8 @@ class _Info extends State<Info> {
                                           _universityPicker();
                                         },
                                         child: Text(
-                                          universities[universityIndex],
+                                          widget.observer
+                                              .universities[universityIndex],
                                           style: const TextStyle(
                                               color: Colors.white,
                                               fontFamily: 'Poppins',
@@ -242,11 +302,22 @@ class _Info extends State<Info> {
                         )),
                       ),
                       onPressed: () {
+                        // update values in observer before moving to next view
+                        widget.observer.user.firstName =
+                            widget.observer.firstNameController.text;
+                        widget.observer.user.lastName =
+                            widget.observer.lastNameController.text;
+                        widget.observer.user.school =
+                            widget.observer.universities[universityIndex];
+                        widget.observer.user.status = "student";
+                        widget.observer.user.gender = genders[selectedGender];
                         if (widget.observer.key.currentState!.validate()) {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const Info2()));
+                                  builder: (context) => Info2(
+                                        observer: widget.observer,
+                                      )));
                         }
                       },
                     ),

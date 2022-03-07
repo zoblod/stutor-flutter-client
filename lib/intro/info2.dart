@@ -1,35 +1,21 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import 'package:stutor/data/observers/home_observer.dart';
 
+import '../data/observers/login_observer.dart';
 import 'info3.dart';
 
+/*  View to select major 
+    
+ */
 class Info2 extends StatefulWidget {
-  const Info2({Key? key}) : super(key: key);
-
+  const Info2({Key? key, required this.observer}) : super(key: key);
+  final LoginObserver observer;
   @override
   State<Info2> createState() => _Info2();
 }
 
 class _Info2 extends State<Info2> {
-  var observer = HomeObserver();
-
-  var classes = [
-    "Intro to Computer Programming",
-    "American Heritage",
-    "Intro to Physics",
-    "CS",
-    "Deep Learning",
-  ];
-  var classesIndex = 0;
-
-  var major = ["Any", "Computer Science", "Economics"];
-  var majorIndex = 0;
-
-  var helpType = ["Homework", "Exam", "Study"];
-  var helpIndex = 0;
-
-  int selectedMajorIndex = 0;
+  List<int> selectedMajorIndex = [];
 
   final Shader linearGradient = const LinearGradient(
     colors: <Color>[Color(0xFFDB4B6D), Color(0xFFE44584)],
@@ -121,10 +107,21 @@ class _Info2 extends State<Info2> {
                         decoration: const BoxDecoration(shape: BoxShape.circle),
                         child: TextButton(
                           onPressed: () {
+                            // update user values before going to next screen
+                            List<String> majors = [];
+                            for (var i = 0;
+                                i < selectedMajorIndex.length;
+                                ++i) {
+                              majors.add(widget
+                                  .observer.majors[selectedMajorIndex[i]]);
+                            }
+                            widget.observer.user.major = majors;
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const Info3()));
+                                    builder: (context) => Info3(
+                                          observer: widget.observer,
+                                        )));
                           },
                           child: Transform(
                               alignment: Alignment.center,
@@ -152,22 +149,29 @@ class _Info2 extends State<Info2> {
                         bottomRight: Radius.circular(20.0)),
                   ),
                   child: ListView.builder(
-                    itemCount: observer.majors.length,
+                    itemCount: widget.observer.majors.length,
                     itemBuilder: (context, index) {
                       return ListTile(
-                        title: Text(observer.majors[index],
+                        title: Text(widget.observer.majors[index],
                             style: const TextStyle(
                               fontFamily: 'Poppins',
                             )),
-                        selectedColor: selectedMajorIndex == index
+                        selectedColor: selectedMajorIndex.contains(index)
                             ? const Color(0xFFCB556F)
                             : null,
-                        selected: selectedMajorIndex == index ? true : false,
+                        selected:
+                            selectedMajorIndex.contains(index) ? true : false,
                         onTap: () {
                           setState(() {
-                            selectedMajorIndex = index;
-                            observer.userMajor =
-                                observer.majors[selectedMajorIndex];
+                            if (selectedMajorIndex.contains(index)) {
+                              setState(() {
+                                selectedMajorIndex.remove(index);
+                              });
+                            } else {
+                              setState(() {
+                                selectedMajorIndex.add(index);
+                              });
+                            }
                           });
                         },
                       );

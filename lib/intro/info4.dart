@@ -1,18 +1,17 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import 'package:stutor/data/observers/home_observer.dart';
+import 'package:stutor/data/observers/login_observer.dart';
 import 'package:stutor/home/request_splash.dart';
 
 class Info4 extends StatefulWidget {
-  const Info4({Key? key}) : super(key: key);
-
+  const Info4({Key? key, required this.observer}) : super(key: key);
+  final LoginObserver observer;
   @override
   State<Info4> createState() => _Info4();
 }
 
 class _Info4 extends State<Info4> {
   var selectedTypeIndex = 0;
-  var observer = HomeObserver();
 
   var types = [
     'Visual',
@@ -114,6 +113,7 @@ class _Info4 extends State<Info4> {
                               const BoxDecoration(shape: BoxShape.circle),
                           child: TextButton(
                             onPressed: () {
+                              widget.observer.storeUserData();
                               Navigator.of(context).popAndPushNamed("//");
                             },
                             child: Transform(
@@ -156,6 +156,8 @@ class _Info4 extends State<Info4> {
                           onTap: () {
                             setState(() {
                               selectedTypeIndex = index;
+                              widget.observer.user.style =
+                                  types[selectedTypeIndex];
                             });
                           },
                         );

@@ -1,37 +1,45 @@
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:stutor/data/classes/class.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:stutor/data/models/class.dart';
+import 'package:stutor/data/models/user.dart';
 
 class HomeObserver {
+  HomeObserver() {
+    loadUserData();
+  }
+
   final commentsController = TextEditingController();
+  var user = UserData("", "", "", [], "", "", [], "");
+  List<String> classesString = [];
+  List<String> majors = ['Any'];
 
-  var newUser = true;
+  void loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    try {
+      UserData data = UserData.fromJson(json.decode(prefs.getString('user')!));
+      user = data;
+      for (var m in user.major) {
+        majors.add(m);
+      }
+      for (var c in user.classes) {
+        classesString.add(c.name);
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('no');
+        print(e);
+      }
+    }
+  }
 
-  var majors = [
-    'Psychology',
-    'Exercise Psychology',
-    'Computer Science',
-    'Economics',
-    'Finance',
-    'Accounting',
-    'Health and physical education/fitness',
-    'Family systems',
-    'Mechanical engineering',
-    'Elementary education and teaching',
-  ];
+  Future<List<Class>> getClasses() async {
+    return user.classes;
+  }
 
-  var userMajor = "";
-
-  var csClasses = [
-    Class('CS', 'Introduction to Computer Programming', 142, []),
-    Class('CS', 'Introduction to Data Science', 180, []),
-    Class('CS', 'Introduction to Computer Systems', 224, []),
-    Class('CS', 'Data Structures and Algorithms', 235, []),
-    Class('CS', 'Discrete Structures', 236, []),
-    Class('CS', 'Advanced Programming Concepts', 240, []),
-    Class('CS', 'Web Programming', 260, []),
-    Class('CS', 'Algorithm Design and Analysis', 312, []),
-    Class('CS', 'Algorithm Design and Analysis', 324, [])
-  ];
-
-  late Class selectedClass;
+  Future<List> getMajor() async {
+    return user.major;
+  }
 }

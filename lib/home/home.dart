@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stutor/custom_views/picker_view.dart';
+import 'package:stutor/data/models/class.dart';
 import 'package:stutor/data/observers/home_observer.dart';
 import 'package:stutor/home/request_splash.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
-
+  const Home({Key? key, required this.observer}) : super(key: key);
+  final HomeObserver observer;
   @override
   State<Home> createState() => _Home();
 }
@@ -14,16 +14,11 @@ class Home extends StatefulWidget {
 class _Home extends State<Home> {
   var observer = HomeObserver();
 
-  var classes = [
-    "Intro to Computer Programming",
-    "American Heritage",
-    "Intro to Physics",
-    "CS",
-    "Deep Learning",
-  ];
-  var classesIndex = 0;
+  late Future<List<Class>> classs;
+  late Future<List> majors;
+  late Future<List<String>> help;
 
-  var major = ["Any", "Computer Science"];
+  var classIndex = 0;
   var majorIndex = 0;
 
   final helpType = ["Homework", "Exam", "Study"];
@@ -36,9 +31,6 @@ class _Home extends State<Home> {
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   ).createShader(const Rect.fromLTWH(0.0, 0.0, 300.0, 80.0));
-
-  // ignore: unused_field
-  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   void _displayMajorPicker() async {
     final selectedMajor = await Navigator.push(
@@ -57,9 +49,9 @@ class _Home extends State<Home> {
             },
             pageBuilder: (BuildContext context, _, __) {
               return PickerView(
-                list: major,
+                list: observer.majors,
                 type: 'selectedMajor',
-                index: 0,
+                index: majorIndex,
               );
             }));
     setState(() {
@@ -84,13 +76,13 @@ class _Home extends State<Home> {
             },
             pageBuilder: (BuildContext context, _, __) {
               return PickerView(
-                list: classes,
+                list: observer.classesString,
                 type: 'selectedClass',
-                index: 0,
+                index: classIndex,
               );
             }));
     setState(() {
-      classesIndex = selectedClass;
+      classIndex = selectedClass;
     });
   }
 
@@ -112,8 +104,8 @@ class _Home extends State<Home> {
             pageBuilder: (BuildContext context, _, __) {
               return PickerView(
                 list: helpType,
-                type: 'selectedClass',
-                index: 0,
+                type: 'selectedType',
+                index: helpIndex,
               );
             }));
     setState(() {
@@ -125,6 +117,15 @@ class _Home extends State<Home> {
     Navigator.of(context).push(RequestSplashScreen());
     Future.delayed(const Duration(seconds: 4))
         .then((value) => Navigator.popAndPushNamed(context, '/tutorsResponse'));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    classs = Future<List<Class>>.delayed(
+        const Duration(seconds: 1), () => observer.getClasses());
+    majors = Future<List>.delayed(
+        const Duration(seconds: 1), () => observer.getMajor());
   }
 
   @override
@@ -198,18 +199,58 @@ class _Home extends State<Home> {
                                 SizedBox(
                                   height: 40,
                                   child: TextButton(
-                                    onPressed: () {
-                                      _displayMajorPicker();
-                                    },
-                                    child: Text(
-                                      major[majorIndex],
-                                      style: const TextStyle(
-                                          color: Color(0xCC202020),
-                                          fontFamily: 'Poppins',
-                                          fontWeight: FontWeight.w100,
-                                          fontSize: 18.0),
-                                    ),
-                                  ),
+                                      onPressed: () {
+                                        _displayMajorPicker();
+                                      },
+                                      child: FutureBuilder<List>(
+                                        future: majors,
+                                        builder: (BuildContext context,
+                                            AsyncSnapshot<List> snapshot) {
+                                          if (snapshot.hasData) {
+                                            return Text(
+                                              observer.majors[majorIndex],
+                                              maxLines: 1,
+                                              style: const TextStyle(
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  color: Color(0xCC202020),
+                                                  fontFamily: 'Poppins',
+                                                  fontWeight: FontWeight.w100,
+                                                  fontSize: 18.0),
+                                            );
+                                          } else {
+                                            return Align(
+                                                alignment:
+                                                    const Alignment(0.0, 0.0),
+                                                child: SizedBox(
+                                                  width: (MediaQuery.of(context)
+                                                          .size
+                                                          .width /
+                                                      2.5),
+                                                  height: 20,
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5.0),
+                                                    child: Container(
+                                                      decoration:
+                                                          const BoxDecoration(
+                                                        color: Colors.grey,
+                                                        boxShadow: [
+                                                          BoxShadow(
+                                                              color: Colors
+                                                                  .black12,
+                                                              offset: Offset(
+                                                                  3.0, 6.0),
+                                                              blurRadius: 10.0),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ));
+                                          }
+                                        },
+                                      )),
                                 ),
                               ],
                             ),
@@ -231,20 +272,57 @@ class _Home extends State<Home> {
                                       fontSize: 25.0),
                                 ),
                                 TextButton(
-                                  onPressed: () {
-                                    _displayClassPicker();
-                                  },
-                                  child: Text(
-                                    classes[classesIndex],
-                                    maxLines: 1,
-                                    style: const TextStyle(
-                                        overflow: TextOverflow.ellipsis,
-                                        color: Color(0xCC202020),
-                                        fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w100,
-                                        fontSize: 18.0),
-                                  ),
-                                ),
+                                    onPressed: () {
+                                      _displayClassPicker();
+                                    },
+                                    child: FutureBuilder<List<Class>>(
+                                      future: classs,
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot<List<Class>> snapshot) {
+                                        if (snapshot.hasData) {
+                                          return Text(
+                                            observer.classesString[classIndex],
+                                            maxLines: 1,
+                                            style: const TextStyle(
+                                                overflow: TextOverflow.ellipsis,
+                                                color: Color(0xCC202020),
+                                                fontFamily: 'Poppins',
+                                                fontWeight: FontWeight.w100,
+                                                fontSize: 18.0),
+                                          );
+                                        } else {
+                                          return Align(
+                                              alignment:
+                                                  const Alignment(0.0, 0.0),
+                                              child: SizedBox(
+                                                width: (MediaQuery.of(context)
+                                                        .size
+                                                        .width /
+                                                    2.5),
+                                                height: 20,
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          5.0),
+                                                  child: Container(
+                                                    decoration:
+                                                        const BoxDecoration(
+                                                      color: Colors.grey,
+                                                      boxShadow: [
+                                                        BoxShadow(
+                                                            color:
+                                                                Colors.black12,
+                                                            offset: Offset(
+                                                                3.0, 6.0),
+                                                            blurRadius: 10.0),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ));
+                                        }
+                                      },
+                                    )),
                               ],
                             ),
                           ),

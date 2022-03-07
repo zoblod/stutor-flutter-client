@@ -1,11 +1,13 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:stutor/data/models/class.dart';
+import 'package:stutor/data/models/user.dart';
+import 'package:stutor/data/services/auth_service.dart';
 
-enum AuthStatus { emailLinkSent, isLoading }
-
-class LoginObserver {
+class LoginObserver extends ChangeNotifier {
   bool success = false;
 
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -17,68 +19,77 @@ class LoginObserver {
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
 
-  final noAccountHashCode = 505284406;
-  final networkError = 271948972;
+  final authService = AuthService();
 
-  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  late Future<String> authToken;
+  var user = UserData("", "", "", [], "", "", [], "");
+  var universities = ["Brigham Young University", "University of Utah"];
+  var majors = [
+    'Psychology',
+    'Exercise Psychology',
+    'Computer Science',
+    'Economics',
+    'Finance',
+    'Accounting',
+    'Health and physical education/fitness',
+    'Family systems',
+    'Mechanical engineering',
+    'Elementary education and teaching',
+  ];
+  var classes = [
+    Class('CS', 'Introduction to Computer Programming', 142, []),
+    Class('CS', 'Introduction to Data Science', 180, []),
+    Class('CS', 'Introduction to Computer Systems', 224, []),
+    Class('CS', 'Data Structures and Algorithms', 235, []),
+    Class('CS', 'Discrete Structures', 236, []),
+    Class('CS', 'Advanced Programming Concepts', 240, []),
+    Class('CS', 'Web Programming', 260, []),
+    Class('CS', 'Algorithm Design and Analysis', 312, []),
+    Class('CS', 'Algorithm Design and Analysis', 324, [])
+  ];
 
-  // login / signin into firebase with email and password
-  // if user has no account create one and initiate the app
-  Future<int> loginToFirebase() async {
-    try {
-      await auth.signInWithEmailAndPassword(
-          email: emailTextController.text,
-          password: passwordTextController.text);
-    } catch (err) {
-      if (kDebugMode) {
-        print(err.toString());
-        print(err.hashCode);
-      }
-      if (handleError(err.hashCode) == 0) {
-        try {
-          await auth.createUserWithEmailAndPassword(
-              email: emailTextController.text,
-              password: passwordTextController.text);
-        } catch (err) {
-          if (kDebugMode) {
-            print(err.toString());
-            print(err.hashCode);
-          }
-        }
-      }
-    } finally {
-      // Store user key
-      final SharedPreferences prefs = await _prefs;
-      authToken = prefs
-          .setString("authToken", auth.currentUser!.uid)
-          .then((bool success) {
-        return auth.currentUser!.uid;
-      });
-      if (kDebugMode) {
-        print(auth.currentUser!.uid);
-      }
-    }
-    return 1;
+  /*  Logs user into Stutor
+        - calls auth service to authenticate user
+   */
+  void login() async {
+    user.email = emailTextController.text;
+    authService.login(emailTextController.text, passwordTextController.text);
   }
 
-  int handleError(int errorCode) {
-    switch (errorCode) {
-      // no account in database
-      case 505284406:
-        {
-          return 0;
-        }
-      // network error
-      case 271948972:
-        {
-          return 1;
-        }
-      // unexpected error
-      default:
-        {
-          return -1;
-        }
-    }
+  /*  Creates user data in database
+        - calls service to create user data
+
+      Args:
+        token(String): auth token
+        userData(User): user data to add to database
+   */
+  void createUserData() {}
+
+  /*  Fetches the universities from the database
+        - calls service to fetch universities
+   */
+  void getUniversities() {}
+
+  /*  Fetches the majors from the university from the database
+        - calls service to fetch majors
+
+      Args:
+        univeristy(String): university name to fetch majors from
+   */
+  void getMajors(String university) {}
+
+  /*  Fetches the classes from the university from the database
+        - calls service to fetch classes
+
+      Args:
+        univeristy(String): university name to fetch classes from
+   */
+  void getClasses(String university) {}
+
+  /* Saves user data locally
+   */
+  void storeUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    var encoded = json.encode(user);
+    prefs.setString('user', encoded);
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stutor/data/classes/stutor.dart';
+import 'package:stutor/data/models/stutor.dart';
 import 'package:stutor/data/observers/home_observer.dart';
 
 class TutorsResponse extends StatefulWidget {

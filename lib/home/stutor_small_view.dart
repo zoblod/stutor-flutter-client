@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stutor/data/classes/stutor.dart';
+import 'package:stutor/data/models/stutor.dart';
 
 class StutorSmallView extends StatelessWidget {
   const StutorSmallView({Key? key, required this.tutor}) : super(key: key);

@@ -1,7 +1,5 @@
 import 'dart:ui';
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class PickerView extends StatefulWidget {
   const PickerView(
@@ -17,32 +15,6 @@ class PickerView extends StatefulWidget {
 }
 
 class _PickerView extends State<PickerView> {
-  var selectedIndex = 0;
-  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  // ignore: unused_field
-  late Future<int> _selected;
-
-  Future<void> _selectOption(int index) async {
-    final SharedPreferences prefs = await _prefs;
-    setState(() {
-      _selected = prefs.setInt(widget.type, index).then((bool success) {
-        selectedIndex = index;
-        return index;
-      });
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _selected = _prefs.then((SharedPreferences prefs) {
-      setState(() {
-        selectedIndex = prefs.getInt(widget.type)!;
-      });
-      return prefs.getInt(widget.type) ?? 0;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -73,12 +45,11 @@ class _PickerView extends State<PickerView> {
                             style: const TextStyle(
                               fontFamily: 'Poppins',
                             )),
-                        selectedColor: selectedIndex == index
+                        selectedColor: widget.index == index
                             ? const Color(0xFFCB556F)
                             : null,
-                        selected: selectedIndex == index ? true : false,
+                        selected: widget.index == index ? true : false,
                         onTap: () {
-                          _selectOption(index);
                           Navigator.of(context).pop(index);
                         },
                       );

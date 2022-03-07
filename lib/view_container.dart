@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stutor/calendar/calendar.dart';
 import 'package:stutor/data/observers/home_observer.dart';
+import 'package:stutor/data/observers/observer.dart';
 import 'package:stutor/home/home.dart';
 import 'package:stutor/messages/messages.dart';
 import 'package:stutor/profile/profile.dart';
@@ -10,20 +11,28 @@ import 'package:stutor/settings/settings.dart';
 class ViewContainer extends StatefulWidget {
   ViewContainer({Key? key, required this.state}) : super(key: key);
   int state;
+  var homeObserver = HomeObserver();
   @override
   State<ViewContainer> createState() => _ViewContainer();
 }
 
 class _ViewContainer extends State<ViewContainer> {
-  var homeObserver = HomeObserver();
-
-  static final List<Widget> _widgetOptions = <Widget>[
-    const Calendar(),
-    const Messages(),
-    const Home(),
-    const Profile(),
-    const Settings(),
-  ];
+  List<Widget> _widgetOptions = [];
+  @override
+  void initState() {
+    super.initState();
+    _widgetOptions = <Widget>[
+      const Calendar(),
+      const Messages(),
+      Home(
+        observer: widget.homeObserver,
+      ),
+      Profile(
+        observer: widget.homeObserver,
+      ),
+      const Settings(),
+    ];
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -121,5 +130,3 @@ class _ViewContainer extends State<ViewContainer> {
     );
   }
 }
-
-class Int {}

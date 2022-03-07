@@ -3,6 +3,11 @@ import 'package:stutor/input_validator.dart';
 import 'package:stutor/data/observers/login_observer.dart';
 import 'package:stutor/intro/info.dart';
 
+/* View to gain user info
+      - get First Name
+      - get Last Name
+      - get University
+ */
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
@@ -117,7 +122,7 @@ class _Login extends State<Login> {
                             const Size(95, 50))),
                     onPressed: () async {
                       if (observer.key.currentState!.validate()) {
-                        await observer.loginToFirebase();
+                        observer.login();
                         // go to home page
                         Navigator.push(
                             context,
@@ -126,8 +131,6 @@ class _Login extends State<Login> {
                                       observer: observer,
                                     )));
                       }
-                      //Navigator.push(context,
-                      //  MaterialPageRoute(builder: (context) => const Login()));
                     },
                   ),
                 ),

@@ -7,7 +7,6 @@ import 'package:stutor/firebase_config.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:stutor/home/response_request.dart';
 import 'package:stutor/intro/splash_screen.dart';
-
 import 'package:stutor/view_container.dart';
 
 Future<void> main() async {
@@ -15,12 +14,13 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
       options: DefaultFirebaseConfig.platformOptions); // initialize firebase
-  runApp(const Stutor());
+  runApp(Stutor());
 }
 
+// ignore: must_be_immutable
 class Stutor extends StatelessWidget {
-  const Stutor({Key? key}) : super(key: key);
-
+  Stutor({Key? key}) : super(key: key);
+  bool hasLogged = false;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

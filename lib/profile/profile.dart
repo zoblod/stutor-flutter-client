@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:stutor/data/observers/home_observer.dart';
 
+// ignore: must_be_immutable
 class Profile extends StatefulWidget {
-  const Profile({Key? key}) : super(key: key);
-
+  Profile({Key? key, required this.observer}) : super(key: key);
+  HomeObserver observer;
   @override
   State<Profile> createState() => _Profile();
 }
@@ -51,19 +53,21 @@ class _Profile extends State<Profile> {
                   shape: BoxShape.rectangle, color: Color(0xFF382E35)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: const [
+                children: [
                   Padding(
-                    padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
                     child: Text(
-                      "Joel Joseph",
-                      style: TextStyle(
+                      widget.observer.user.firstName +
+                          " " +
+                          widget.observer.user.lastName,
+                      style: const TextStyle(
                           color: Colors.white,
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w600,
                           fontSize: 25),
                     ),
                   ),
-                  Padding(
+                  const Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Text(
                       "Brigham Young University, Provo UT",

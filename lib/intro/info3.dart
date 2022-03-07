@@ -1,11 +1,15 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:stutor/intro/info4.dart';
-import 'package:stutor/data/observers/home_observer.dart';
+import 'package:stutor/data/models/class.dart';
+import 'package:stutor/data/observers/login_observer.dart';
 
+/*  View to pick classes
+
+ */
 class Info3 extends StatefulWidget {
-  const Info3({Key? key}) : super(key: key);
-
+  const Info3({Key? key, required this.observer}) : super(key: key);
+  final LoginObserver observer;
   @override
   State<Info3> createState() => _Info3();
 }
@@ -15,7 +19,6 @@ class _Info3 extends State<Info3> {
 
   List<int> selectedClasses = [];
 
-  var observer = HomeObserver();
   final Shader linearGradient = const LinearGradient(
     colors: <Color>[Color(0xFFDB4B6D), Color(0xFFE44584)],
     begin: Alignment.topLeft,
@@ -108,10 +111,18 @@ class _Info3 extends State<Info3> {
                               const BoxDecoration(shape: BoxShape.circle),
                           child: TextButton(
                             onPressed: () {
+                              List<Class> classes = [];
+                              for (var i = 0; i < selectedClasses.length; ++i) {
+                                classes.add(widget
+                                    .observer.classes[selectedClasses[i]]);
+                              }
+                              widget.observer.user.classes = classes;
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const Info4()));
+                                      builder: (context) => Info4(
+                                            observer: widget.observer,
+                                          )));
                             },
                             child: Transform(
                                 alignment: Alignment.center,
@@ -139,16 +150,17 @@ class _Info3 extends State<Info3> {
                           bottomRight: Radius.circular(20.0)),
                     ),
                     child: ListView.builder(
-                      itemCount: observer.csClasses.length,
+                      itemCount: widget.observer.classes.length,
                       itemBuilder: (context, index) {
                         return ListTile(
-                          title: Text(observer.csClasses[index].name,
+                          title: Text(widget.observer.classes[index].name,
                               style: const TextStyle(
                                 fontFamily: 'Poppins',
                               )),
-                          subtitle: Text(observer.csClasses[index].abbr +
+                          subtitle: Text(widget.observer.classes[index].abbr +
                               " " +
-                              (observer.csClasses[index].number).toString()),
+                              (widget.observer.classes[index].number)
+                                  .toString()),
                           selectedColor: selectedClasses.contains(index)
                               ? const Color(0xFFCB556F)
                               : null,
@@ -162,8 +174,6 @@ class _Info3 extends State<Info3> {
                             } else {
                               setState(() {
                                 selectedClasses.add(index);
-                                observer.selectedClass =
-                                    observer.csClasses[selectedClassIndex];
                               });
                             }
                           },
