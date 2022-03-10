@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
+import 'package:stutor/data/models/school.dart';
 import 'package:stutor/data/services/service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -17,6 +18,7 @@ class AuthService extends Service {
    */
   Future<String> login(String email, String password) async {
     await loginToFirebase(email, password);
+
     return authToken;
   }
 
@@ -38,6 +40,9 @@ class AuthService extends Service {
           <String, String>{'firstName': firstName, 'lastName': lastName}),
     );
     authToken = await auth.currentUser!.getIdToken(true);
+    if (kDebugMode) {
+      print(authToken);
+    }
     return authToken;
   }
 
@@ -87,5 +92,21 @@ class AuthService extends Service {
           return -1;
         }
     }
+  }
+
+  /*  login into server and auth student
+
+      Args:
+        firstName(string): string of user's first name
+        lastName(string): string of user's last name
+  */
+
+  Future<SchoolList> fetchUniversities() async {
+    final response = await http.get(Uri.parse(
+        'https://us-central1-stutor-448b2.cloudfunctions.net/api-student/v1/schools'));
+    if (response.statusCode == 200) {
+      return SchoolList.fromJson(json.decode(response.body)['schools']);
+    }
+    throw Error();
   }
 }

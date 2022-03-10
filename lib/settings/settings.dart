@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Settings extends StatefulWidget {
@@ -8,6 +9,7 @@ class Settings extends StatefulWidget {
 }
 
 class _Settings extends State<Settings> {
+  final FirebaseAuth auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,7 +96,10 @@ class _Settings extends State<Settings> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 15, 30, 10),
                     child: TextButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          await auth.signOut();
+                          Navigator.pushNamed(context, '/');
+                        },
                         child: const Text("Sign Out",
                             textScaleFactor: 1.5,
                             style: TextStyle(

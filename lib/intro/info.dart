@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stutor/custom_views/picker_view.dart';
+import 'package:stutor/data/models/school.dart';
 import 'package:stutor/data/observers/login_observer.dart';
 
 import 'info2.dart';
@@ -20,6 +21,8 @@ class _Info extends State<Info> {
   var universityIndex = 0;
   var selectedGender = 0;
   var genders = ["Male", "Female", "Other"];
+  late Future<SchoolList> schools;
+
   // ignore: unused_field
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
@@ -30,6 +33,12 @@ class _Info extends State<Info> {
   ).createShader(const Rect.fromLTWH(0.0, 0.0, 300.0, 80.0));
 
   void _universityPicker() async {
+    List<School>? temp;
+    List<String> list = [];
+    await schools.then((value) => temp = value.schools);
+    for (var school in temp!) {
+      list.add(school.name);
+    }
     final index = await Navigator.push(
         context,
         PageRouteBuilder(
@@ -46,7 +55,7 @@ class _Info extends State<Info> {
             },
             pageBuilder: (BuildContext context, _, __) {
               return PickerView(
-                list: widget.observer.universities,
+                list: list,
                 type: 'selectedUniversity',
                 index: universityIndex,
               );
@@ -87,6 +96,7 @@ class _Info extends State<Info> {
   void initState() {
     super.initState();
     // fetch universities
+    schools = widget.observer.authService.fetchUniversities();
   }
 
   @override
@@ -98,7 +108,7 @@ class _Info extends State<Info> {
             color: Color(0xFF382E35),
             image: DecorationImage(
                 image: ExactAssetImage('assets/graphics/pad_lines.png'),
-                fit: BoxFit.fitHeight),
+                fit: BoxFit.fill),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -255,15 +265,59 @@ class _Info extends State<Info> {
                                         onPressed: () {
                                           _universityPicker();
                                         },
-                                        child: Text(
-                                          widget.observer
-                                              .universities[universityIndex],
-                                          style: const TextStyle(
-                                              color: Colors.white,
-                                              fontFamily: 'Poppins',
-                                              fontSize: 20),
-                                          textAlign: TextAlign.start,
-                                        ),
+                                        child: FutureBuilder<SchoolList>(
+                                            future: schools,
+                                            builder: (BuildContext context,
+                                                AsyncSnapshot<SchoolList>
+                                                    snapshot) {
+                                              if (snapshot.hasData) {
+                                                return Text(
+                                                  snapshot
+                                                      .data!
+                                                      .schools[universityIndex]
+                                                      .name,
+                                                  style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontFamily: 'Poppins',
+                                                      fontSize: 20),
+                                                  textAlign: TextAlign.start,
+                                                );
+                                              } else {
+                                                return Align(
+                                                    alignment: const Alignment(
+                                                        0.0, 0.0),
+                                                    child: SizedBox(
+                                                      width: (MediaQuery.of(
+                                                                  context)
+                                                              .size
+                                                              .width /
+                                                          2.5),
+                                                      height: 20,
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5.0),
+                                                        child: Container(
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                            color: Colors.grey,
+                                                            boxShadow: [
+                                                              BoxShadow(
+                                                                  color: Colors
+                                                                      .black12,
+                                                                  offset:
+                                                                      Offset(
+                                                                          3.0,
+                                                                          6.0),
+                                                                  blurRadius:
+                                                                      10.0),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ));
+                                              }
+                                            }), /**/
                                       ),
                                     ],
                                   ),
@@ -301,16 +355,22 @@ class _Info extends State<Info> {
                           borderRadius: BorderRadius.circular(15.0),
                         )),
                       ),
-                      onPressed: () {
+                      onPressed: () async {
+                        List<School>? temp;
+                        await schools.then((value) => temp = value.schools);
+
                         // update values in observer before moving to next view
                         widget.observer.user.firstName =
                             widget.observer.firstNameController.text;
                         widget.observer.user.lastName =
                             widget.observer.lastNameController.text;
                         widget.observer.user.school =
-                            widget.observer.universities[universityIndex];
+                            temp![universityIndex].name;
                         widget.observer.user.status = "student";
                         widget.observer.user.gender = genders[selectedGender];
+                        await widget.observer.authService.loginToBackend(
+                            widget.observer.user.firstName,
+                            widget.observer.user.lastName);
                         if (widget.observer.key.currentState!.validate()) {
                           Navigator.push(
                               context,

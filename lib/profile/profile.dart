@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stutor/data/observers/home_observer.dart';
+import 'package:stutor/profile/profile_bio.dart';
+import 'package:stutor/profile/profile_user_info.dart';
 
 // ignore: must_be_immutable
 class Profile extends StatefulWidget {
@@ -67,12 +69,12 @@ class _Profile extends State<Profile> {
                           fontSize: 25),
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "Brigham Young University, Provo UT",
-                      style:
-                          TextStyle(color: Colors.white, fontFamily: 'Poppins'),
+                      widget.observer.user.school,
+                      style: const TextStyle(
+                          color: Colors.white, fontFamily: 'Poppins'),
                     ),
                   )
                 ],
@@ -89,77 +91,17 @@ class _Profile extends State<Profile> {
                 ),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 30, 0, 50),
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                    child: Column(
-                      children: const [
-                        Text("30",
-                            style:
-                                TextStyle(fontSize: 20, fontFamily: 'Poppins')),
-                        Text("Sessions",
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                            )),
-                      ],
-                    ),
-                  ),
-                  const Spacer(),
-                  Column(
-                    children: const [
-                      Text("4.9",
-                          style:
-                              TextStyle(fontSize: 20, fontFamily: 'Poppins')),
-                      Text("Rating",
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                          ))
-                    ],
-                  ),
-                  const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-                    child: Column(
-                      children: const [
-                        Text("3",
-                            style:
-                                TextStyle(fontSize: 20, fontFamily: 'Poppins')),
-                        Text("Months",
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                            ))
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-            const Text(
-              "BIO",
-              style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20),
-            ),
-            const Padding(
-              padding: EdgeInsets.fromLTRB(25, 20, 25, 20),
-              child: Text(
-                "I am a current senior completeing my last semester in the econ program at BYU. I am taking Economics 110 and advanced mathmatics and serving as a long time TA for both classes...",
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                ),
-              ),
-            ),
-            const Text(
-              "CLASSES",
-              style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20),
-            ),
+
+            // Profile Bio Info
+            const ProfileBio(),
+
+            // Profile User Info
+            ProfileUserInfo(widget: widget),
+
+            // Space for the tab bar
+            Container(
+              height: 150,
+            )
           ],
         ),
       ),

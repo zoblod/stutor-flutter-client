@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stutor/data/models/class.dart';
+import 'package:stutor/data/models/school.dart';
 import 'package:stutor/data/models/user.dart';
 import 'package:stutor/data/services/auth_service.dart';
 
@@ -23,6 +24,7 @@ class LoginObserver extends ChangeNotifier {
 
   var user = UserData("", "", "", [], "", "", [], "");
   var universities = ["Brigham Young University", "University of Utah"];
+  SchoolList? schools;
   var majors = [
     'Psychology',
     'Exercise Psychology',
@@ -91,5 +93,9 @@ class LoginObserver extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     var encoded = json.encode(user);
     prefs.setString('user', encoded);
+  }
+
+  void fetchUniversities() async {
+    schools = await authService.fetchUniversities();
   }
 }

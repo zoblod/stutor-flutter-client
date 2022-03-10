@@ -181,7 +181,7 @@ class _Home extends State<Home> {
                     Row(
                       children: [
                         SizedBox(
-                          width: (MediaQuery.of(context).size.width / 2),
+                          width: (MediaQuery.of(context).size.width / 2) - 25,
                           child: Padding(
                             padding: const EdgeInsets.all(20.0),
                             child: Column(
@@ -194,7 +194,7 @@ class _Home extends State<Home> {
                                       color: Color(0xFF382E35),
                                       fontFamily: 'Poppins',
                                       fontWeight: FontWeight.normal,
-                                      fontSize: 25.0),
+                                      fontSize: 20.0),
                                 ),
                                 SizedBox(
                                   height: 40,
@@ -216,7 +216,7 @@ class _Home extends State<Home> {
                                                   color: Color(0xCC202020),
                                                   fontFamily: 'Poppins',
                                                   fontWeight: FontWeight.w100,
-                                                  fontSize: 18.0),
+                                                  fontSize: 15.0),
                                             );
                                           } else {
                                             return Align(
@@ -257,7 +257,7 @@ class _Home extends State<Home> {
                           ),
                         ),
                         SizedBox(
-                          width: (MediaQuery.of(context).size.width / 2.5),
+                          width: (MediaQuery.of(context).size.width / 2) - 25,
                           child: Padding(
                             padding: const EdgeInsets.all(20.0),
                             child: Column(
@@ -269,7 +269,7 @@ class _Home extends State<Home> {
                                   style: TextStyle(
                                       fontFamily: 'Poppins',
                                       fontWeight: FontWeight.normal,
-                                      fontSize: 25.0),
+                                      fontSize: 20.0),
                                 ),
                                 TextButton(
                                     onPressed: () {
@@ -281,14 +281,14 @@ class _Home extends State<Home> {
                                           AsyncSnapshot<List<Class>> snapshot) {
                                         if (snapshot.hasData) {
                                           return Text(
-                                            observer.classesString[classIndex],
+                                            snapshot.data![classIndex].name,
                                             maxLines: 1,
                                             style: const TextStyle(
                                                 overflow: TextOverflow.ellipsis,
                                                 color: Color(0xCC202020),
                                                 fontFamily: 'Poppins',
                                                 fontWeight: FontWeight.w100,
-                                                fontSize: 18.0),
+                                                fontSize: 15.0),
                                           );
                                         } else {
                                           return Align(
@@ -347,7 +347,8 @@ class _Home extends State<Home> {
                         Column(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.all(20.0),
+                              padding:
+                                  const EdgeInsets.fromLTRB(20, 10, 20, 10),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -356,7 +357,7 @@ class _Home extends State<Home> {
                                     style: TextStyle(
                                         fontFamily: 'Poppins',
                                         fontWeight: FontWeight.normal,
-                                        fontSize: 25.0),
+                                        fontSize: 20.0),
                                   ),
                                   TextButton(
                                     onPressed: () {
@@ -368,7 +369,7 @@ class _Home extends State<Home> {
                                           color: Color(0xCC202020),
                                           fontFamily: 'Poppins',
                                           fontWeight: FontWeight.w100,
-                                          fontSize: 18.0),
+                                          fontSize: 15.0),
                                     ),
                                   ),
                                 ],
@@ -396,7 +397,8 @@ class _Home extends State<Home> {
                         Column(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.all(20.0),
+                              padding:
+                                  const EdgeInsets.fromLTRB(20, 10, 20, 10),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -405,7 +407,7 @@ class _Home extends State<Home> {
                                     style: TextStyle(
                                         fontFamily: 'Poppins',
                                         fontWeight: FontWeight.normal,
-                                        fontSize: 25.0),
+                                        fontSize: 20),
                                   ),
                                   SizedBox(
                                     width: (MediaQuery.of(context).size.width /
@@ -426,7 +428,7 @@ class _Home extends State<Home> {
                     SafeArea(
                       bottom: true,
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
+                        padding: const EdgeInsets.fromLTRB(20, 28, 20, 20),
                         child: FittedBox(
                           fit: BoxFit.scaleDown,
                           child: TextButton(
@@ -437,8 +439,8 @@ class _Home extends State<Home> {
                                   child: Text(
                                     'find my stutor',
                                     textAlign: TextAlign.center,
-                                    textScaleFactor: 1.8,
                                     style: TextStyle(
+                                        fontSize: 25,
                                         color: Colors.white,
                                         fontWeight: FontWeight.w300),
                                   ),

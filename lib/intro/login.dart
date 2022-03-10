@@ -26,7 +26,7 @@ class _Login extends State<Login> {
             color: Color(0xFF282828), //Color.fromRGBO(64, 44, 60, 1),
             image: DecorationImage(
                 image: ExactAssetImage('assets/graphics/pad_lines.png'),
-                fit: BoxFit.fitHeight),
+                fit: BoxFit.fill),
           ),
           child: Form(
             key: observer.key,
